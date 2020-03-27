@@ -1,8 +1,10 @@
 import json
 
-from sqlalchemy import Column, Integer, String, BIGINT, Boolean
+from sqlalchemy import Column, Integer, String, BIGINT, Boolean, DateTime
 
 from init import db
+
+from datetime import datetime
 
 
 class Inbound(db.Model):
@@ -19,6 +21,10 @@ class Inbound(db.Model):
     up = Column(BIGINT, default=0, nullable=False)
     down = Column(BIGINT, default=0, nullable=False)
     enable = Column(Boolean, default=True, nullable=False)
+    # add the host
+    host = Column(String(50), default='', nullable=True)
+    start_data = Column(DateTime, default=datetime.now)
+    lease_month = Column(Integer, default=0)
 
     def __init__(self, port=None, listen=None, protocol=None,
                  settings=None, stream_settings=None, sniffing=None, remark=None):

@@ -142,6 +142,8 @@ def init_db(update=False):
     add_if_not_exist(Setting('traffic_job_interval', 'traffic_job_interval', '30', 'int', '', True), update)
     add_if_not_exist(Setting('v2ctl_cmd_path', 'v2ctl_cmd_path', '/usr/bin/v2ray/v2ctl', 'text', '', True), update)
     add_if_not_exist(Setting('secret_key', '', os.urandom(24), 'text', '', True), False)
+    # add a setting config to identified the host
+    add_if_not_exist(Setting('host','host','','text','',True), update)
     db.session.commit()
 
 

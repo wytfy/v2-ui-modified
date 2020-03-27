@@ -9,6 +9,9 @@ from init import db
 from util import config, server_info
 from util.v2_jobs import v2_config_change
 from v2ray.models import Inbound
+# import setting to catch host
+from base.models import Setting
+
 
 v2ray_bp = Blueprint('v2ray', __name__, url_prefix='/v2ray')
 
@@ -68,6 +71,10 @@ def add_inbound():
     sniffing = request.form['sniffing']
     remark = request.form['remark']
     inbound = Inbound(port, listen, protocol, settings, stream_settings, sniffing, remark)
+    # add the host
+    host_setting = Setting.query.filter_by(key='host').first()
+    host = host_setting.value
+    inbound.host = host
     db.session.add(inbound)
     db.session.commit()
     return jsonify(
