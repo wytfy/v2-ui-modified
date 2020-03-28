@@ -6,7 +6,7 @@ from sqlalchemy import and_
 
 from base.models import Msg
 from init import db
-from util import config, server_info
+from util import config, server_info, v2_util
 from util.v2_jobs import v2_config_change
 from v2ray.models import Inbound
 # import setting to catch host
@@ -142,8 +142,9 @@ def add_if_not_none(d, key, value):
 
 
 # 以下为api接口
-@v2ray_bp.route('/api/account')
-def account():
-    inbs = Inbound.query.all()
-    inbs = '[' + ','.join([json.dumps(inb.to_json(), ensure_ascii=False) for inb in inbs]) + ']'
-    return inbs
+@v2ray_bp.route('/api/conf_change')
+@v2_config_change
+def conf_change():
+    v2_config = v2_util.gen_v2_config_from_db()
+    v2_util.write_v2_config(v2_config)
+    return 'v2 config has changed'
